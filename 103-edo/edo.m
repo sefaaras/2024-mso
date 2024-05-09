@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=edo(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
     
 N = 30;
 Max_iter = ceil(maxIteration / N);

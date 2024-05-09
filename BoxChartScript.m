@@ -1,8 +1,8 @@
 clear;
 clc;
-algorithms = {'agde', 'case1', 'case2', 'case3'};
-filename = 'agde-50.xlsx'; run = 51;
-algorithmsNumber = length(algorithms); functionsNumber = 30; experimentNumber = 3; 
+algorithms = {'sos', 'fdb_sos'};
+filename = 'test.xlsx'; run = 5;
+algorithmsNumber = length(algorithms); functionsNumber = 12; experimentNumber = 1; 
 solutionR = zeros(algorithmsNumber, functionsNumber * experimentNumber, run);
 solution = zeros(algorithmsNumber * experimentNumber, functionsNumber, run);
 for i = 1 : algorithmsNumber

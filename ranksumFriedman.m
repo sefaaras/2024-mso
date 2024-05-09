@@ -1,9 +1,10 @@
 clear;
 clc;
-algorithms = {'sos', 'fdb_sos'};
-algorithmsNumber = length(algorithms); functionsNumber = 12; experimentNumber = 1; 
-experimentsName = {'cec2022', 'Mean'};
-filename = 'case.xlsx'; run = 5;
+algorithms = {'sos', 'fdb_sos', 'case1'};
+algorithmsNumber = length(algorithms); 
+functionsNumber = 12; experimentNumber = 1; 
+experimentsName = {'cec2022'};
+filename = 'test.xlsx'; run = 21;
 solution = zeros(algorithmsNumber * experimentNumber, functionsNumber, run);
 solutionR = zeros(algorithmsNumber, functionsNumber * experimentNumber, run);
 friedmanR = zeros(functionsNumber * experimentNumber, algorithmsNumber);
@@ -43,6 +44,7 @@ for i = 1 : functionsNumber
             end
             [p,h, stats] = ranksum(firstWilcon, secondWilcon);
             wilcon = 0;
+            disp(stats);
             if(h)
                 if(p < 0.05)
                     if(stats.zval < 0)

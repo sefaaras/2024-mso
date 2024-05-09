@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=rime(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
 N = 30; % Number of search agents
 Max_iter = ceil(maxIteration/N);
 lb = lbArray;
