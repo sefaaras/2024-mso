@@ -1,26 +1,23 @@
+function [bestSolution, bestFitness, iteration]=HOA(fhd, dimension, maxIteration, fNumber)
 
-function[bestSolution, bestFitness, iteration] = HOA(cec20so, dimension, maxFes, i)
+config;
 
 %% Problem Definition
 
 global nVar;
-fhd=cec20so;
-fNumber=i;
-CostFunction=@(x) Cost_Function(x);        % Cost Function
-
 nVar=dimension;           % Number of Decision Variables
 
 VarSize=[1 nVar];  % Size of Decision Variables Matrix
 
-VarMin=ones(1, dimension) * -100;        % Lower Bound of Variables
-VarMax=ones(1, dimension) * 100;         % Upper Bound of Variables
+VarMin=lbArray;        % Lower Bound of Variables
+VarMax=ubArray;         % Upper Bound of Variables
 
 % Velocity Limits
 VelMax=0.1*(VarMax-VarMin);
 VelMin=-VelMax;
 %% Algorithm Parameters
 
-MaxIt=maxFes;                 % Maximum Number of Iterations
+MaxIt=maxIteration;                 % Maximum Number of Iterations
 nHourse=50;                % Number of Mean Points
 
 %% Initialization

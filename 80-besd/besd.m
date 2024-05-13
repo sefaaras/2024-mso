@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=besd(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
 
 N=30;
 D=dimension;

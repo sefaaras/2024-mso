@@ -1,15 +1,14 @@
-function[bestSolution, bestFitness, iteration] = FHO(cec20so, dimension, maxFes, i)
+function [bestSolution, bestFitness, iteration]=FHO(fhd, dimension, maxIteration, fNumber)
 
+        lbArray = ones(1, dimension) * -100;
+        ubArray = ones(1, dimension) * 100;
 
 %% Problem Information
-CostFunction = @(x) Sphere(x);          % @ Cost Function
-VarNumber = 10;                         % Number of variables;
-VarMin = ones(1, dimension) * -100;        % Lower bound of variable;
-VarMax =ones(1, dimension) * 100;         % Upper bound of variable;
-fhd=cec20so;
-fNumber=i;
+VarNumber = dimension;                         % Number of variables;
+VarMin =  lbArray;        % Lower bound of variable;
+VarMax = ubArray;         % Upper bound of variable;
 %% General Parameters of the Algorithm
-MaxFes = maxFes ;                       % Maximum number of generations
+MaxFes = maxIteration ;                       % Maximum number of generations
 nPop = 25 ;                             % Maximum number of initial candidates
 HN = randi([1 ceil(nPop/5)],1,1) ;      % Maximum number of FireHawks
 

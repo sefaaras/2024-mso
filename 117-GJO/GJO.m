@@ -1,5 +1,6 @@
-% function [Male_Jackal_score,Male_Jackal_pos,Convergence_curve]=GJO(SearchAgents_no,Max_iter,lb,ub,dim,fobj)
-function[bestSolution, bestFitness, iteration] = GJO(cec20so, dimension, maxFes, i)
+function [bestSolution, bestFitness, iteration]=GJO(fhd, dimension, maxIteration, fNumber)
+
+config;
 
 %% initialize Golden jackal pair
 dim=dimension;
@@ -7,11 +8,9 @@ Male_Jackal_pos=zeros(1,dim);
 Male_Jackal_score=inf; 
 Female_Jackal_pos=zeros(1,dim);  
 Female_Jackal_score=inf; 
-lb=ones(1, dimension) * -100;
-ub=ones(1, dimension) * 100;
-Max_iter=maxFes;
-fhd=cec20so;
-fNumber=i;
+lb=lbArray;
+ub=ubArray;
+Max_iter=maxIteration;
 SearchAgents_no=50; % Number of search agents
 %% Initialize the positions of search agents
 Positions=initialization(SearchAgents_no,dim,ub,lb);

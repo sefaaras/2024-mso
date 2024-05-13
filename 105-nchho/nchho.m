@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=nchho(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
 N=100;
 T=ceil(maxIteration/(N*2.5));
 lb=lbArray;

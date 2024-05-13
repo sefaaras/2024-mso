@@ -1,14 +1,13 @@
+function [bestSolution, bestFitness, iteration]=DO(fhd, dimension, maxIteration, fNumber)
 
-% function [Best_fitness,Best_position,Convergence_curve]=DO(Popsize,Maxiteration,LB,UB,Dim,Fobj)
-function[bestSolution, bestFitness, iteration] = DO(cec20so, dimension, maxFes, i)
-LB=ones(1, dimension) * -100;
-UB=ones(1, dimension) * 100;
+config;
+
+LB=lbArray;
+UB=ubArray;
 % N=30; % Number of search agents
 Popsize=30;
-Maxiteration=maxFes; % Maximum numbef of iterations
+Maxiteration=maxIteration; % Maximum numbef of iterations
 Dim=dimension;
-fhd=cec20so;
-fNumber=i;
 tic;
 
 dandelions=initialization(Popsize,Dim,UB,LB);
@@ -23,7 +22,6 @@ end
 [~,sorted_indexes]=sort(dandelionsFitness);
 Best_position=dandelions(sorted_indexes(1),:);
 Best_fitness = dandelionsFitness(sorted_indexes(1));
-Convergence_curve(1)=Best_fitness;
 
  Maxiteration=Maxiteration/Popsize;
 
@@ -31,7 +29,6 @@ for t=1:Maxiteration
     
     %% Rising stage
     beta=randn(Popsize,Dim);
-    rand_=randperm(Popsize);
     alpha=rand()*((1/Maxiteration^2)*t^2-2/Maxiteration*t+1); % eq.(8) in this paper
     a=-1/(Maxiteration^2-2*Maxiteration+1);
     b=-2*a;
@@ -55,8 +52,10 @@ for t=1:Maxiteration
     end
     dandelions=dandelions_1;
     % Check boundries
-    dandelions = max(dandelions,LB);
-    dandelions = min(dandelions,UB);
+    for i=1:Popsize
+        dandelions(i) = max(dandelions(i, :),LB);
+        dandelions(i) = min(dandelions(i, :),UB);
+    end
     
     %% Decline stage
     dandelions_mean=sum(dandelions,1)/Popsize; % eq.(14) in this paper

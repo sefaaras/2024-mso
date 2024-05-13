@@ -1,11 +1,12 @@
 % function [Best_F,Best_P,Conv]=RSA(N,T,LB,UB,Dim,F_obj)
-function[bestSolution, bestFitness, iteration] = RSA(cec20so, dimension, maxFes, i)
-LB=ones(1, dimension) * -100;
-UB=ones(1, dimension) * 100;
+function [bestSolution, bestFitness, iteration]=RSA(fhd, dimension, maxIteration, fNumber)
+
+config;
+
+LB=lbArray;
+UB=ubArray;
 Dim=dimension;
-fhd=cec20so;
-fNumber=i;
-T=maxFes;
+T=maxIteration;
 N=10;
 Best_P=zeros(1,Dim);           % best positions
 Best_F=inf;                    % best fitness

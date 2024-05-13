@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=koa(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
 
 SearchAgents_no=25; % Number of search agents (Planets)
 Tmax=maxIteration; % Maximum number of Function evaluations

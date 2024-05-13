@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=nmpa(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
 SearchAgents_no=25;
 Max_iter=ceil(maxIteration / (SearchAgents_no * 2));
 lb=lbArray;

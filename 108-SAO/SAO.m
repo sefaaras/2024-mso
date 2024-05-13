@@ -1,12 +1,12 @@
-% function [Agent_Fit,Agent_Pos,Converge_curve]=SAO(Molecules,Max_iter,lb,ub,dim,fobj)
-function[bestSolution, bestFitness, iteration] = SAO(cec20so, dimension, maxFes, i)
+function [bestSolution, bestFitness, iteration]=SAO(fhd, dimension, maxIteration, fNumber)
+
+config;
+
 nMole=50; % Number of Smell Molecules (Search Agent)
-lb=ones(1, dimension) * -100;
-ub=ones(1, dimension) * 100;
+lb=lbArray;
+ub=ubArray;
 dim=dimension;
-fhd=cec20so;
-fNumber=i;
-Max_iter=maxFes; % Maximum numbef of iterations
+Max_iter=maxIteration; % Maximum numbef of iterations
 Agent_Pos=zeros(1,dim);
 Agent_Fit=inf; %
 

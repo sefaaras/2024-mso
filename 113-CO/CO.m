@@ -1,18 +1,13 @@
-function[bestSolution, bestFitness, iteration] = CO(cec20so, dimension, maxFes, i)
-settingscec;
+function [bestSolution, bestFitness, iteration]=CO(fhd, dimension, maxIteration, fNumber)
 
-%% Problem Definition
-% f_name=['F1';'F2';'F3';'F4';'F5';'F6';'F7';'F8';'F9'];
-% f_name1=['F10';'F11';'F12';'F13';'F14';'F15';'F16';'F17';'F18';'F19';'F20';'F21';'F22';'F23'];
+config;
 
 tic
 for fnm = 1 % Test functions
     for run = 1 : 1
-lb=ones(1, dimension) * -100;
-ub=ones(1, dimension) * 100;
+lb=lbArray;
+ub=ubArray;
 D=dimension;
-fhd=cec20so;
-fNumber=i;
         %% Problem definition (Algorithm 1, L#1)
 %         if fnm <= 9
 %             Function_name = f_name(fnm,:);
@@ -53,7 +48,7 @@ fNumber=i;
         %% Initial parameters
         t = 0;                    % Hunting time counter (Algorithm 1, L#4)
         it = 1;                   % Iteration counter(Algorithm 1, L#5)
-        MaxIt =maxFes;           % Maximum number of iterations (Algorithm 1, L#6)
+        MaxIt =maxIteration;           % Maximum number of iterations (Algorithm 1, L#6)
         T = ceil(D/10)*60;        % Hunting time (Algorithm 1, L#7)
         FEs = 0;                  % Counter for function evaluations (FEs)
         %% CO Main Loop

@@ -1,18 +1,17 @@
-% function [x,fval,ConvergenceCurve] = GEO (fun,nvars,lb,ub,options)
+function [bestSolution, bestFitness, iteration]=GEO(fhd, dimension, maxIteration, fNumber)
 
-function[bestSolution, bestFitness, iteration] = GEO(cec20so, dimension, maxFes, i)
+config;
 
-%% initialization
-lb=ones(1, dimension) * -100;
-ub=ones(1, dimension) * 100;
+lb=lbArray;
+ub=ubArray;
 PopulationSize =50;
-MaxIterations =maxFes;
-fhd=cec20so;
-fNumber=i;
+MaxIterations =maxIteration;
 nvars=dimension;
 ConvergenceCurve  = zeros (1, MaxIterations);
 
-x = lb + rand (PopulationSize,nvars) .* (ub-lb);
+for i=1:PopulationSize
+    x(i,:)=rand(1,nvars).*(ub-lb)+lb;
+end
 
 % FitnessScores = fun (x);
 FitnessScores=testFunction(x', fhd, fNumber);
@@ -63,16 +62,20 @@ for CurrentIteration = 1 : MaxIterations
 	end
 	
 	% calculate unit vectors
-	AttackVectorUnit = AttackVectorInitial ./ VecNorm (AttackVectorInitial, 2, 2);
-	CruiseVectorUnit = CruiseVectorInitial ./ VecNorm (CruiseVectorInitial, 2, 2);
-	
+    for ii=1:PopulationSize
+       AttackVectorUnit(ii, :) = AttackVectorInitial(ii, :) / VecNorm (AttackVectorInitial(ii, :), 2, 2);
+       CruiseVectorUnit(ii, :) = CruiseVectorInitial(ii, :) ./ VecNorm (CruiseVectorInitial(ii, :), 2, 2);    
+    end
+
 	% correct vectors for converged eagles
 	AttackVectorUnit(ConvergedEagles,:) = 0;
 	CruiseVectorUnit(ConvergedEagles,:) = 0;
 	
 	% calculate movement vectors
-	AttackVector = rand (PopulationSize, 1) .* AttackPropensity(CurrentIteration) .* Radius .* AttackVectorUnit; % (first term of Eq. 6 in paper)
-	CruiseVector = rand (PopulationSize, 1) .* CruisePropensity(CurrentIteration) .* Radius .* CruiseVectorUnit; % (second term of Eq. 6 in paper)
+    for ii=1:PopulationSize
+	AttackVector(ii, :) = rand (PopulationSize, 1) .* AttackPropensity(CurrentIteration) .* Radius .* AttackVectorUnit(ii, :); % (first term of Eq. 6 in paper)
+	CruiseVector(ii, :) = rand (PopulationSize, 1) .* CruisePropensity(CurrentIteration) .* Radius .* CruiseVectorUnit(ii, :); % (second term of Eq. 6 in paper)
+    end
 	StepVector = AttackVector + CruiseVector;
 	
 	% calculate new x

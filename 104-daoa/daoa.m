@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=daoa(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
 
 Dim=dimension;                          
 LB = lbArray;       

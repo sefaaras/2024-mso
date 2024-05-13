@@ -1,14 +1,12 @@
-% function [Convergance, BestPos,BestVal] = SMO(PopSize,ProblemSize,MaxIt,FlockNum,lu,Funcname)
-function[bestSolution, bestFitness, iteration] = SMO(cec20so, dimension, maxFes, i)
+function [bestSolution, bestFitness, iteration]=SMO(fhd, dimension, maxIteration, fNumber)
+
+config;
 
 ProblemSize  = dimension;    % Dimensions D  = 2, 10, 30, 50, 100
 PopSize    = 100;          % Maximum number of population
-MaxIt      =maxFes;   % Maximum number of iterations
+MaxIt      =maxIteration;   % Maximum number of iterations
 FlockNum  = 10;               % Number of flocks (range k = 3, 5, 10, 15, 20) 
-lu = [ones(1, dimension) * -100; ones(1, dimension) * 100];
-Alg_run = 30;
-fhd=cec20so;
-fNumber=i;
+lu = [lbArray; ubArray];
 % Randomly distribute starlings in the search space
 Pop = repmat(lu(1,:),PopSize,1)+rand(PopSize,ProblemSize).*(repmat(lu(2,:)- lu(1,:),PopSize,1));
 % Val = cec17_func(Pop',Funcname);
@@ -43,6 +41,7 @@ for  t=1:MaxIt
     Xr_hat = [PosConvergance; PopSep];
     r11 = randperm (size(Xr_hat, 1),size(PopSep, 1))';
     % Eq.(2)
+    disp(BestPos(1,Param2Change));
     PopSep(:,Param2Change) = BestPos(1,Param2Change)+ Fsep(:,Param2Change).* (Xr_hat(r11,Param2Change) - Pop(r1,Param2Change));
     PopSep = BoundCorrection(PopSep,Pop(SepInd,:),lu);
 %     ValSep = cec17_func(PopSep', Funcname);

@@ -1,13 +1,13 @@
-% function [Best_fitness,BestX,ConvergenceCurve]=FDA(maxiter,lb,ub,dim,fobj,alpha,beta)
-function[bestSolution, bestFitness, iteration] = FDA(cec20so, dimension, maxFes, i)
-lb=ones(1, dimension) * -100;
-ub=ones(1, dimension) * 100;
+function [bestSolution, bestFitness, iteration]=FDA(fhd, dimension, maxIteration, fNumber)
+
+config;
+
+lb=lbArray;
+ub=ubArray;
 % Initialize the positions of flows
 alpha=50; % Number of flows
 beta=1; %Number of neighborhoods
-fhd=cec20so;
-fNumber=i;
-maxiter=maxFes; % Maximum numbef of iterations
+maxiter=maxIteration; % Maximum numbef of iterations
 dim=dimension;
 flow_x=initialization(alpha,dim,ub,lb);
 neighbor_x=zeros(beta,dim);

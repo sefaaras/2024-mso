@@ -1,6 +1,6 @@
 function [bestSolution, bestFitness, iteration]=bwo(fhd, dimension, maxIteration, fNumber)
 
-settings;
+config;
 
 Npop = 50;      % Number of search agents
 Max_it = ceil((maxIteration/Npop)*0.95);  % Maximum number of iterations
