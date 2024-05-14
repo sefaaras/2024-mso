@@ -1,5 +1,7 @@
 addpath('1-sos');
 addpath('80-besd');
+addpath('97-cmaes');
+addpath('98-cecmaes');
 addpath('99-bwo');
 addpath('100-koa');
 addpath('102-rime');
@@ -16,4 +18,3 @@ addpath('114-DO');
 addpath('115-FDA');
 addpath('116-GEO');
 addpath('117-GJO');
-addpath('121-FHO');
