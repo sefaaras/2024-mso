@@ -72,10 +72,8 @@ for CurrentIteration = 1 : MaxIterations
 	CruiseVectorUnit(ConvergedEagles,:) = 0;
 	
 	% calculate movement vectors
-    for ii=1:PopulationSize
-	AttackVector(ii, :) = rand (PopulationSize, 1) .* AttackPropensity(CurrentIteration) .* Radius .* AttackVectorUnit(ii, :); % (first term of Eq. 6 in paper)
-	CruiseVector(ii, :) = rand (PopulationSize, 1) .* CruisePropensity(CurrentIteration) .* Radius .* CruiseVectorUnit(ii, :); % (second term of Eq. 6 in paper)
-    end
+	AttackVector = rand (PopulationSize, 1) .* AttackPropensity(CurrentIteration) .* Radius .* AttackVectorUnit; % (first term of Eq. 6 in paper)
+	CruiseVector = rand (PopulationSize, 1) .* CruisePropensity(CurrentIteration) .* Radius .* CruiseVectorUnit; % (second term of Eq. 6 in paper)
 	StepVector = AttackVector + CruiseVector;
 	
 	% calculate new x

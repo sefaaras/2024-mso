@@ -52,10 +52,8 @@ for t=1:Maxiteration
     end
     dandelions=dandelions_1;
     % Check boundries
-    for i=1:Popsize
-        dandelions(i) = max(dandelions(i, :),LB);
-        dandelions(i) = min(dandelions(i, :),UB);
-    end
+    dandelions = max(dandelions,LB);
+    dandelions = min(dandelions,UB);
     
     %% Decline stage
     dandelions_mean=sum(dandelions,1)/Popsize; % eq.(14) in this paper
