@@ -1,5 +1,5 @@
 paths;
-algorithms = {'SMO_case1'}; % algorithm
+algorithms = {'nmpa_case1'}; % algorithm
 dimension = 20; % (2, 10, 20)
 maxFE = 1000; % 1000000
 

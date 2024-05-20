@@ -1,6 +1,6 @@
 clear;
 clc;
-algorithms = {'sos', 'fdb_sos', 'case1'};
+algorithms = {'besd', 'case1'};
 algorithmsNumber = length(algorithms); 
 functionsNumber = 12; experimentNumber = 1; 
 experimentsName = {'cec2022'};
