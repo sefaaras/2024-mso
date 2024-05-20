@@ -1,7 +1,7 @@
 paths;
-algorithms = {'daoa_case1'}; % algorithm
+algorithms = {'SMO_case1'}; % algorithm
 dimension = 20; % (2, 10, 20)
-maxFE = 100; % 1000000
+maxFE = 1000; % 1000000
 
 cec2022 = str2func('cec22_test_func');
 globalMins = {300, 400, 600, 800, 900, 1800, 2000, 2200, 2300, 2400, 2600, 2700};
