@@ -1,6 +1,6 @@
 clear;
 clc;
-algorithms = {'besd', 'case1'};
+algorithms = { 'koa_case1','koa_case2','koa_case3','koa_case4','koa_case5','koa_case6','koa_case7','koa_case8'};
 algorithmsNumber = length(algorithms); 
 functionsNumber = 12; experimentNumber = 1; 
 experimentsName = {'cec2022'};
@@ -107,7 +107,7 @@ for i = 1 : experimentNumber
     wStatistic = [wStatistic, sumWilcon((i-1)*algorithmsNumber+1:i*algorithmsNumber,:)];
     fStatistic = [fStatistic; fridmanRes(i,functionsNumber+1,:)];
     for j = 1 : algorithmsNumber
-        wStatisticS(j, i) = cellstr(strcat(int2str(wStatistic(j, 3 * (i - 1) + 1)), '/', int2str(wStatistic(j, 3 * (i - 1) + 2)), '/', int2str(wStatistic(j, 3 * i))));
+        wStatisticS(j, i) = cellstr(strcat(int2str(wStatistic(j, 3 * (i - 1) + 1)), '_', int2str(wStatistic(j, 3 * (i - 1) + 2)), '_', int2str(wStatistic(j, 3 * i))));
     end
 end
 

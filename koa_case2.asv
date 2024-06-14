@@ -1,0 +1,185 @@
+function [bestSolution, bestFitness, iteration]=koa_case2(fhd, dimension, maxIteration, fNumber)
+
+config;
+
+SearchAgents_no=25; % Arama ajanlarının sayısı (Gezegenler)
+Tmax=maxIteration; % Maksimum Fonksiyon değerlendirmeleri sayısı
+dim=dimension;
+lb = lbArray;
+ub = ubArray;
+%%%%-------------------Tanımlar--------------------------%%
+%%
+Sun_Pos=zeros(1,dim); % Güneşi temsil eden, şimdiye kadar bulunan en iyi çözümü içeren bir vektör
+Sun_Score=inf; % Şimdiye kadar bulunan en iyi skoru içeren bir skaler değişken
+Convergence_curve=zeros(1,Tmax);
+%%-------------------Kontrol parametreleri--------------------------%%
+%%
+Tc=3;
+M0=0.1;
+lambda=15;
+%% Adım 1: Başlatma süreci
+%%---------------Başlatma----------------------%%
+ % Yörünge Eksantrikliği (e)   
+orbital=rand(1,SearchAgents_no); %% Eq.(4)
+ %% Yörünge Dönemi (T) 
+T=abs(randn(1,SearchAgents_no)); %% Eq.(5)
+Positions=initialization(SearchAgents_no,dim,ub,lb); % Gezegenlerin pozisyonlarını başlat
+t=0; %% Fonksiyon değerlendirme sayacı 
+%%
+%%---------------------Değerlendirme-----------------------%%
+for i=1:SearchAgents_no
+    %% CEC-2014, CEC-2017, CEC-2020 ve CEC-2022 test setleri
+    PL_Fit(i)=testFunction(Positions(i,:)', fhd, fNumber);
+    % Şimdiye kadar bulunan en iyi çözümü güncelle
+    if PL_Fit(i)<Sun_Score % Maksimizasyon problemi için bunu > olarak değiştirin
+       Sun_Score=PL_Fit(i); % Şimdiye kadar bulunan en iyi skoru güncelle
+       Sun_Pos=Positions(i,:); % Şimdiye kadar bulunan en iyi çözümü güncelle
+    end
+end
+while t<Tmax %% Bitiş koşulu  
+ [Order] = sort(PL_Fit);  % Mevcut popülasyondaki çözümlerin uygunluk değerlerini sıralama
+ %% t fonksiyon değerlendirmesindeki en kötü Uygunluk değeri
+ worstFitness = Order(SearchAgents_no); %% Eq.(11)
+ M=M0*(exp(-lambda*(t/Tmax))); %% Eq. (12)
+ %% Şimdiye kadar bulunan en iyi çözüm ile i. çözüm arasındaki Öklid mesafesini temsil eden R'yi hesapla
+ for i=1:SearchAgents_no
+    R(i)=0;
+    for j=1:dim
+       R(i)=R(i)+(Sun_Pos(j)-Positions(i,j))^2; %% Eq.(7)
+    end
+    R(i)=sqrt(R(i));
+ end
+ %% t zamanında Güneş ve nesne i'nin kütlesi şu şekilde hesaplanır:
+ for i=1:SearchAgents_no
+    sum=0;
+    for k=1:SearchAgents_no
+        sum=sum+(PL_Fit(k)-worstFitness);
+    end
+    MS(i)=rand*(Sun_Score-worstFitness)/(sum); %% Eq.(8)
+ m(i)=(PL_Fit(i)-worstFitness)/(sum); %% Eq.(9)
+ end
+ 
+ %% Adım 2: Kütleçekim kuvvetini tanımlama (F)
+ % Evrensel kütleçekim yasasına göre Güneş ve i. gezegenin çekim kuvvetini hesaplama:
+ for i=1:SearchAgents_no
+    Rnorm(i)=(R(i)-min(R))/(max(R)-min(R)); %% Normalleştirilmiş R (Eq.(24))
+    MSnorm(i)=(MS(i)-min(MS))/(max(MS)-min(MS)); %% Normalleştirilmiş MS
+    Mnorm(i)=(m(i)-min(m))/(max(m)-min(m)); %% Normalleştirilmiş m
+    Fg(i)=orbital(i)M((MSnorm(i)*Mnorm(i))/(Rnorm(i)*Rnorm(i)+eps))+(rand); %% Eq.(6)
+ end
+ %% a1, t zamanında nesne i'nin eliptik yörüngesinin yarı büyük eksenini temsil eder,
+ for i=1:SearchAgents_no
+    a1(i)=rand*(T(i)^2*(M*(MS(i)+m(i))/(4*pi*pi)))^(1/3); %% Eq.(23)
+ end
+ 
+ for i=1:SearchAgents_no
+    %% a2, -1'den -2'ye kademeli olarak azalan bir döngü kontrol parametresidir
+    a2=-1+-1*(rem(t,Tmax/Tc)/(Tmax/Tc)); %% Eq.(29)
+    %% n, 1'den -2'ye doğru lineer olarak azalan bir faktördür
+    n=(a2-1)*rand+1; %% Eq.(28)
+    a = rouletteFitnessDistanceBalance(Positions , PL_Fit);%rulet fitness hesaplamasını kullandık
+    b = 0;
+    for j = 1:SearchAgents_no
+        if j > n
+  b=j; % sıralı seçim yöntemi kullandık
+        end
+    end
+    rd=rand(1,dim); %% Normal dağılıma göre üretilmiş bir vektör
+    r=rand; %% r1 [0,1] aralığında rastgele bir sayı
+    %% Rastgele atanan bir ikili vektör 
+    U1=rd<r; %% Eq.(21)  
+    O_P=Positions(i,:); %% i. çözümün mevcut pozisyonunu saklama
+    %% Adım 6: Güneş ile mesafeyi güncelleme
+    if rand<rand
+         %% h, t zamanında Güneş ile mevcut gezegen arasındaki mesafeyi kontrol eden adaptif bir faktördür
+         h=(1/(exp(n.*randn))); %% Eq.(27)
+         %% Mevcut çözüm, şimdiye kadar bulunan en iyi çözüm ve rastgele seçilen çözüm baz alınarak oluşturulan ortalama vektör
+         Xm=(Positions(b,:)+Sun_Pos+Positions(i,:))/3.0; 
+         Positions(i,:)=Positions(i,:).U1+(Xm+h.(Xm-Positions(a,:))).*(1-U1); %% Eq.(26)
+    else
+        
+        %% Adım 3: Bir nesnenin hızını hesaplama
+        % Mevcut gezegenin arama yönünü tersine çevirme veya bırakma bayrağı
+         if rand<0.5 %% Eq.(18)
+           f=1;
+         else
+           f=-1;
+         end
+         L=(M*(MS(i)+m(i))*abs((2/(R(i)+eps))-(1/(a1(i)+eps))))^(0.5); %% Eq.(15)
+         U=rd>rand(1,dim); %% Bir ikili vektör
+         if Rnorm(i)<0.5 %% Eq.(13)
+            M=(rand.*(1-r)+r); %% Eq.(16)
+            l=L*M*U; %% Eq.(14)
+            Mv=(rand*(1-rd)+rd); %% Eq.(20)
+            l1=L.Mv.(1-U);%% Eq.(19)
+            V(i,:)=l.(2*rand*Positions(i,:)-Positions(a,:))+l1.(Positions(b,:)-Positions(a,:))+(1-Rnorm(i))f*U1.*rand(1,dim).(ub-lb); %% Eq.(13a)
+         else
+            U2=rand>rand; %% Eq. (22) 
+            V(i,:)=rand.L.(Positions(a,:)-Positions(i,:))+(1-Rnorm(i))f*U2*rand(1,dim).(rand*ub-lb);  %% Eq.(13b)
+   end %% IF Sonu
+         
+         %% Adım 4: Yerel optimumdan kaçma
+         % Mevcut gezegenin arama yönünü tersine çevirme veya bırakma bayrağını güncelleme  
+         if rand<0.5 %% Eq.(18)
+            f=1;
+         else
+            f=-1;
+         end
+         %% Adım 5
+         Positions(i,:)=((Positions(i,:)+V(i,:).f)+(Fg(i)+abs(randn))*U.(Sun_Pos-Positions(i,:))); %% Eq.(25)
+    end %% IF Sonu
+    %% Arama alanının sınırlarını aşan arama ajanlarını geri döndür
+    if rand<rand
+       for j=1:size(Positions,2)
+          if  Positions(i,j)>ub(j)
+              Positions(i,j)=lb(j)+rand*(ub(j)-lb(j));
+          elseif  Positions(i,j)<lb(j)
+              Positions(i,j)=lb(j)+rand*(ub(j)-lb(j));
+          end %% IF Sonu
+       end   %% For Sonu
+    else
+       Positions(i,:) = min(max(Positions(i,:),lb),ub);
+    end %% IF Sonu
+%% CEC-2014, CEC-2017, CEC-2020 ve CEC-2022 test setleri
+    % Her arama ajanı için hedef fonksiyonu hesapla
+    PL_Fit1=testFunction(Positions(i,:)', fhd, fNumber);
+ %  Adım 7: Elitizm, Eq.(30)
+    if PL_Fit1<PL_Fit(i) % Maksimizasyon problemi için bunu > olarak değiştirin
+       PL_Fit(i)=PL_Fit1; % 
+       % Şimdiye kadar bulunan en iyi çözümü güncelle
+       if PL_Fit(i)<Sun_Score % Maksimizasyon problemi için bunu > olarak değiştirin
+           Sun_Score=PL_Fit(i); % Şimdiye kadar bulunan en iyi skoru güncelle
+           Sun_Pos=Positions(i,:); % Şimdiye kadar bulunan en iyi çözümü güncelle
+       end
+    else
+       Positions(i,:)=O_P;
+    end %% IF Sonu
+    t=t+1; %% Mevcut fonksiyon değerlendirmesini artırma
+    if t>Tmax %% Bitiş koşulunu kontrol etme
+        break;
+    end %% IF Sonu
+    Convergence_curve(t)=Sun_Score; %% t fonksiyon değerlendirmesindeki şimdiye kadar bulunan en iyi uygunluk değerini yakınsama eğrisine yerleştir 
+ end %% for i Sonu
+end %% while Sonu 
+bestSolution=Sun_Pos;
+bestFitness=Sun_Score;
+iteration=1;
+
+end%% Fonksiyon Sonu
+
+function Positions=initialization(SearchAgents_no,dim,ub,lb)
+Boundary_no= length(ub); % sınırların sayısı
+% Tüm değişkenlerin sınırları eşitse ve kullanıcı hem üst sınır hem alt sınır için tek bir sayı girerse
+if Boundary_no==1
+     Positions=rand(SearchAgents_no,dim).*(ub-lb)+lb;
+end
+% Her değişkenin farklı alt ve üst sınırı varsa
+if Boundary_no>1
+    for i=1:dim
+        ub_i=ub(i);
+        lb_i=lb(i);
+         Positions(:,i)=rand(SearchAgents_no,1).*(ub_i-lb_i)+lb_i;      
+    end
+end
+end
+
